@@ -16,6 +16,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PelangganResource extends Resource
 {
+    public static function getNavigationLabel(): string
+    {
+        return 'Data Pelanggan';
+    }
     protected static ?string $model = Pelanggan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group'; // Icon menu di sidebar
@@ -30,7 +34,7 @@ class PelangganResource extends Resource
                 Forms\Components\TextInput::make('noKontrol')
                     ->label('No Kontrol')
                     ->required()
-                    ->unique(Pelanggan::class, 'noKontrol'), // Pastikan unik
+                    ->unique(Pelanggan::class, 'noKontrol'),
                 Forms\Components\TextInput::make('nama')
                     ->label('Nama Pelanggan')
                     ->required(),
