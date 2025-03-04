@@ -7,7 +7,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('tarif', function (Blueprint $table) {
-            $table->string('jenis_pelanggan')->unique();
+            $table->string('jenis_pelanggan')->primary();
             $table->integer('biayabeban');
             $table->integer('tarifkwh');
             $table->timestamps();

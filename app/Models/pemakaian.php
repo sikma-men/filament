@@ -17,6 +17,7 @@ class Pemakaian extends Model
         'meter_awal',
         'meter_akhir',
         'biaya_beban_pemakai',
+        'status',
     ];
 
     // Getter untuk menghitung jumlah_pakai secara otomatis

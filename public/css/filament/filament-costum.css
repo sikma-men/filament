@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #004699; /* Warna Biru PLN */
+}
+
+.fi-simple-layout {
+    background-color: #004699 !important; /* Background utama login */
+}
+
+.fi-auth-container {
+    background-color: #ffffff; /* Warna putih untuk form login */
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.fi-auth-heading {
+    color: #004699 !important; /* Warna teks judul */
+    font-weight: bold;
+}
+
+.fi-button {
+    background-color: #fbbc05 !important; /* Warna tombol sesuai logo PLN */
+    color: #004699 !important;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.fi-button:hover {
+    background-color: #ffa500 !important; /* Warna hover tombol */
+}
+
+.fi-input {
+    border-radius: 8px;
+    border: 1px solid #004699;
+}
+
+.fi-input:focus {
+    border-color: #fbbc05 !important;
+    box-shadow: 0 0 5px rgba(251, 188, 5, 0.5);
+}

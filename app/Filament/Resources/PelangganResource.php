@@ -20,6 +20,14 @@ class PelangganResource extends Resource
     {
         return 'Data Pelanggan';
     }
+    public static function getPluralModelLabel(): string
+    {
+        return ' Data Pelanggan';
+    }
+    protected function getCreateButtonLabel(): string
+    {
+        return 'Buat Data Pelanggan';
+    }
     protected static ?string $model = Pelanggan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group'; // Icon menu di sidebar
@@ -54,9 +62,7 @@ class PelangganResource extends Resource
                         'B-3' => 'B-3',
                         'I-2' => 'I-2',
                         'I-3' => 'I-3',
-                        'I-4'=> 'I-4',
-
-
+                        'I-4' => 'I-4',
                     ])
                     ->required(),
             ]);
@@ -83,14 +89,13 @@ class PelangganResource extends Resource
                     ->label('Telepon'),
                 Tables\Columns\TextColumn::make('jenis_plg')
                     ->label('Jenis Pelanggan')
-                    ->badge(), // Menampilkan sebagai badge
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime(),
             ])
-            ->filters([
-                // Tambahkan filter jika diperlukan
-            ])
+            ->filters([])
+            ->emptyStateHeading('Tidak ada data pelanggan')
             ->actions([
                 EditAction::make(),
                 DeleteAction::make(),

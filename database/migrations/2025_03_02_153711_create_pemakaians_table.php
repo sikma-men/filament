@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->integer('meter_akhir');
             $table->integer('jumlah_pakai')->storedAs('meter_akhir - meter_awal');
             $table->integer('biaya_beban_pemakai');
+            $table->string('status');
             $table->timestamps();
         });
     }
