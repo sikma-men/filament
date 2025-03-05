@@ -186,4 +186,13 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'filament' => [
+        'resources' => [
+            'Pelanggan' => [
+                'plural' => 'Data Pelanggan',
+                'singular' => 'Pelanggan',
+            ],
+        ],
+    ],
+
 ];

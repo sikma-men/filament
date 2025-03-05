@@ -20,6 +20,14 @@ class PelangganResource extends Resource
     {
         return 'Data Pelanggan';
     }
+    public static function getPluralModelLabel(): string
+    {
+        return ' Data Pelanggan';
+    }
+    protected function getCreateButtonLabel(): string
+    {
+        return 'Buat Data Pelanggan';
+    }
     protected static ?string $model = Pelanggan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group'; // Icon menu di sidebar
@@ -43,7 +51,7 @@ class PelangganResource extends Resource
                 Forms\Components\TextInput::make('telepon')
                     ->label('Telepon')
                     ->tel(), // Format telepon
-                Forms\Components\Select::make('jenis_plg')
+                Forms\Components\Select::make('jenis_pelanggan')
                     ->label('Jenis Pelanggan')
                     ->options([
                         'R-1' => 'R-1',
@@ -54,9 +62,7 @@ class PelangganResource extends Resource
                         'B-3' => 'B-3',
                         'I-2' => 'I-2',
                         'I-3' => 'I-3',
-                        'I-4'=> 'I-4',
-
-
+                        'I-4' => 'I-4',
                     ])
                     ->required(),
             ]);
@@ -81,16 +87,15 @@ class PelangganResource extends Resource
                     ->label('Alamat'),
                 Tables\Columns\TextColumn::make('telepon')
                     ->label('Telepon'),
-                Tables\Columns\TextColumn::make('jenis_plg')
+                Tables\Columns\TextColumn::make('jenis_pelanggan')
                     ->label('Jenis Pelanggan')
-                    ->badge(), // Menampilkan sebagai badge
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime(),
             ])
-            ->filters([
-                // Tambahkan filter jika diperlukan
-            ])
+            ->filters([])
+            ->emptyStateHeading('Tidak ada data pelanggan')
             ->actions([
                 EditAction::make(),
                 DeleteAction::make(),

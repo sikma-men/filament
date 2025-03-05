@@ -23,6 +23,6 @@ class Pelanggan extends Model
         'nama',
         'alamat',
         'telepon',
-        'jenis_plg',
+        'jenis_pelanggan',
     ];
 }
