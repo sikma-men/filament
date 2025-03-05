@@ -57,7 +57,7 @@ class TarifResource extends Resource
                     ->label('Biaya Beban'),
                 Tables\Columns\TextColumn::make('tarifkwh')
                     ->label('Tarif Per KWH'),
-                    
+
             ])
             ->filters([
                 //

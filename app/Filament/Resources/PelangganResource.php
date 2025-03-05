@@ -51,7 +51,7 @@ class PelangganResource extends Resource
                 Forms\Components\TextInput::make('telepon')
                     ->label('Telepon')
                     ->tel(), // Format telepon
-                Forms\Components\Select::make('jenis_plg')
+                Forms\Components\Select::make('jenis_pelanggan')
                     ->label('Jenis Pelanggan')
                     ->options([
                         'R-1' => 'R-1',
@@ -87,7 +87,7 @@ class PelangganResource extends Resource
                     ->label('Alamat'),
                 Tables\Columns\TextColumn::make('telepon')
                     ->label('Telepon'),
-                Tables\Columns\TextColumn::make('jenis_plg')
+                Tables\Columns\TextColumn::make('jenis_pelanggan')
                     ->label('Jenis Pelanggan')
                     ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
