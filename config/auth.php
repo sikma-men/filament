@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'loket' => [
+            'driver' => 'session',
+            'provider' => 'loket',
+        ],
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'loket' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Loket::class,
         ],
 
         // 'users' => [
@@ -93,6 +101,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'loket' => [
+            'provider' => 'loket',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
