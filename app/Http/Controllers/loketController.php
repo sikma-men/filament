@@ -4,58 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
-use App\Models\Loket;
 
 class LoketController extends Controller
 {
-    // Menampilkan halaman login
+    // Method untuk menampilkan form login
     public function showLoginForm()
     {
-        return view('loket.loginLoket'); // Sesuaikan dengan nama file Blade yang digunakan
+        return view('loket.loginLoket'); // Pastikan file view-nya ada di resources/views/loket/loginLoket.blade.php
     }
 
-    // Proses autentikasi login
-    public function login(Request $request)
+    // Method untuk memproses login
+    public function loginloket(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
-        // Cek apakah email ada di database
-        $user = Loket::where('email', $request->email)->first();
+        $credentials = $request->only('email', 'password');
 
-        if (!$user) {
-            return back()->withErrors([
-                'email' => 'Email tidak terdaftar.',
-            ]);
+        // Coba autentikasi menggunakan guard 'loket'
+        if (Auth::guard('loket')->attempt($credentials)) {
+            return redirect()->route('loket.dashboard'); // Redirect ke dashboard jika berhasil
         }
 
-        // Cek apakah password benar
-        if (!Hash::check($request->password, $user->password)) {
-            return back()->withErrors([
-                'password' => 'Password Anda salah.',
-            ]);
-        }
-
-        // Jika email dan password benar, lakukan login
-        if (Auth::guard('loket')->attempt($request->only('email', 'password'))) {
-            return redirect()->intended('/dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'Terjadi kesalahan, silakan coba lagi.',
-        ]);
+        // Jika gagal, kembali ke halaman login dengan pesan error
+        return redirect()->route('loginloket')->with('error', 'Email atau password salah!');
     }
 
-
-    // Logout
-    public function logout()
+    // Method untuk menampilkan dashboard
+    public function dashboard()
     {
-        Auth::logout();
-        Session::flush();
-        return redirect('/login');
+        return view('loket.dashboard'); // Pastikan file view-nya ada di resources/views/loket/dashboard.blade.php
+    }
+
+    // Method untuk logout
+    public function logout(Request $request)
+    {
+        Auth::guard('loket')->logout(); // Logout dari guard 'loket'
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('loginloket'); // Redirect ke halaman login
     }
 }

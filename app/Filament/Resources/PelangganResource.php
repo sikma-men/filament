@@ -97,8 +97,10 @@ class PelangganResource extends Resource
             ->filters([])
             ->emptyStateHeading('Tidak ada data pelanggan')
             ->actions([
+                tables\Actions\ActionGroup::make([
                 EditAction::make(),
                 DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),

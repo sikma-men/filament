@@ -1,17 +1,20 @@
 <?php
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class Loket extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    protected $table = 'akun_loket';
+    protected $table = 'akun_loket'; // Tambahkan ini!
+
     protected $fillable = ['nama', 'email', 'password'];
-    protected $hidden = ['password']; // Sembunyikan password dalam response JSON
+
+    protected $hidden = ['password'];
+
+    protected $casts = [
+        'password' => 'hashed', // Jika pakai Laravel 10 ke atas
+    ];
 }

@@ -1,13 +1,15 @@
 <?php
-
-use Illuminate\Support\Facades\Route;
-use Filament\Http\Livewire\Auth\Login;
 use App\Http\Controllers\LoketController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', [LoketController::class, 'showLoginForm'])->name('login.form');
-Route::post('/login', [LoketController::class, 'login'])->name('login');
+// Route untuk menampilkan form login
+Route::get('loginloket', [LoketController::class, 'showLoginForm'])->name('loginloket');
+
+// Route untuk memproses login
+Route::post('loginloket', [LoketController::class, 'loginloket']);
+
+// Route untuk dashboard (dilindungi oleh middleware auth:loket)
+Route::get('/dashboard-loket', [LoketController::class, 'dashboard'])->name('loket.dashboard')->middleware('auth:loket');
+
+// Route untuk logout
 Route::post('/logout', [LoketController::class, 'logout'])->name('logout');
-
-Route::get('/dashboard', function () {
-    return view('loket.dashboard');
-})->middleware(['auth'])->name('dashboard');

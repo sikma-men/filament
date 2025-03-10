@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'web', // Guard default untuk aplikasi
+        'passwords' => 'users', // Password reset default
     ],
 
     /*
@@ -38,11 +38,11 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'users', // Untuk admin (Filament)
         ],
         'loket' => [
             'driver' => 'session',
-            'provider' => 'loket',
+            'provider' => 'lokets', // Untuk loket
         ],
     ],
 
@@ -66,17 +66,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\User::class, // Model untuk admin (Filament)
         ],
-        'loket' => [
+        'lokets' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Loket::class,
+            'model' => App\Models\Loket::class, // Model untuk loket
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
@@ -100,13 +95,13 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'users',
+            'provider' => 'users', // Untuk admin (Filament)
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],
-        'loket' => [
-            'provider' => 'loket',
+        'lokets' => [ // Sesuaikan dengan provider 'lokets'
+            'provider' => 'lokets', // Untuk loket
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

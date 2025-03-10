@@ -16,7 +16,7 @@ class loket extends Seeder
         DB::table('akun_loket')->insert([
             'nama' => 'Wataligma',
             'email' => 'n@gmail.com',
-             'password' =>Hash::make('password123'),
+            'password' =>bcrypt('n'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
