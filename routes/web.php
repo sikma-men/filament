@@ -13,3 +13,8 @@ Route::get('/dashboard-loket', [LoketController::class, 'dashboard'])->name('lok
 
 // Route untuk logout
 Route::post('/logout', [LoketController::class, 'logout'])->name('logout');
+
+Route::get('/pemakaian', [LoketController::class, 'pemakaian'])->name('pemakaian')->middleware('auth:loket');
+Route::get('/pemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('pemakaian.show');
+Route::post('/pemakaian/update-status', [LoketController::class, 'updateStatus'])->name('pemakaian.update-status');
+
