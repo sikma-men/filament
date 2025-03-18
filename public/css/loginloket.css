@@ -34,7 +34,7 @@ body {
 .form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 5px;
 }
 
 .inputForm {
@@ -43,6 +43,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 10px;
+    
 }
 
 .inputForm input {
@@ -75,7 +76,7 @@ body {
 .flex-column {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 15px;    font-weight: bold;
 }
 
 .p {
