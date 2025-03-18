@@ -6,69 +6,225 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Loket PLN</title>
+
+    <!-- SweetAlert2 Script -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="{{ asset('css/loginloket.css') }}">
+
+    <!-- Google Fonts (Poppins) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Reset and Box-Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #f4f4f4; /* Light background for the body */
+        }
+
+        /* Wrapper to split the background and form */
+        .wrapper {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Background Image Section */
+        .background {
+            flex: 1;
+            background-image: url('https://th.bing.com/th/id/R.0865480b46f6403443b2a24f0d44a7dc?rik=xlLNA9Wx%2f%2fmHNQ&riu=http%3a%2f%2fwww.mse.co.id%2fassets-frontend%2fimg%2fblog%2fnews1.jpeg&ehk=4W29Baksr%2bEH2V4b8MazXzU88MIumf9dGY%2b9ctsnWfE%3d&risl=&pid=ImgRaw&r=0');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Login container styling */
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            background-color: #ffffff; /* White background for form */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Stronger shadow to create separation */
+            border-radius: 20px;
+            text-align: center;
+            z-index: 1; /* Form stays on top */
+            margin: 50px; /* Add margin to separate the form from edges */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header styling */
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Form styling */
+        .form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 20px; /* Increased gap between form elements */
+        }
+
+        /* Input field styling */
+        .inputForm {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Aligning input fields to the left */
+            width: 100%;
+        }
+
+        .inputForm input {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            transition: border 0.3s ease;
+        }
+
+        .inputForm input:focus {
+            border: 1px solid #0073e6; /* Focused border color */
+        }
+
+        /* Button styling */
+        .button-submit {
+            background-color: #151717;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Make button stretch full width */
+        }
+
+        .button-submit:hover {
+            background-color: #252727;
+        }
+
+        /* Flex-row for layouts */
+        .flex-row {
+            display: flex;
+            justify-content: flex-start; /* Align to the left */
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%; /* Take full width */
+        }
+
+        /* Flex-column for input labels */
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px; /* Reduced margin for better spacing */
+            font-weight: bold;
+            text-align: left;
+            color: #333;
+            align-items: flex-start;
+        }
+
+        /* Other text styling */
+        .span {
+            color: #0073e6;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Adjust for smaller screens */
+        @media (max-width: 500px) {
+            .login-container {
+                padding: 30px; /* Reduced padding for smaller screens */
+            }
+
+            .form {
+                gap: 20px;
+            }
+
+            .button-submit {
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            .span {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Loket PLN</h1>
+    <div class="wrapper">
+        <!-- Background Image Section -->
+        <div class="background"></div>
 
-        {{-- Menampilkan error jika email atau password salah --}}
-        @if(session('error'))
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: "{{ session('error') }}",
-                });
-            </script>
-        @endif
+        <!-- Login Form Section -->
+        <div class="login-container">
+            {{-- Menampilkan error jika email atau password salah --}}
+            @if(session('error'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: "{{ session('error') }}",
+                    });
+                </script>
+            @endif
 
-        <!-- Form Container Start -->
-        <div class="form-wrapper">
-            <!-- Form Starts -->
-            <form class="form" method="POST" action="{{ route('loginloket') }}">
-                @csrf
-                <!-- Email Field -->
-                <div class="flex-column">
-                    <label for="email">Email</label>
-                </div>
-                <div class="inputForm">
-                    <svg height="20" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg"><g id="Layer_3" data-name="Layer 3"><path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"></path></g></svg>
-                    <input type="text" id="email" name="email" class="input" placeholder="Enter your Email" value="{{ old('email') }}" required>
-                </div>
-
-                <!-- Password Field -->
-                <div class="flex-column">
-                    <label for="password">Password</label>
-                </div>
-                <div class="inputForm">
-                    <svg height="20" viewBox="-64 0 512 512" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path><path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path></svg>
-                    <input type="password" id="password" name="password" class="input" placeholder="Enter your Password" required>
-                    <svg viewBox="0 0 576 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"></path></svg>
-                </div>
-
-                <!-- Remember Me and Forgot Password -->
-                <div class="flex-row">
-                    <div>
-                        <input type="checkbox" name="remember">
-                        <label>Remember me</label>
+            <!-- Form Container Start -->
+            <div class="form-wrapper">
+                <h1>Loket PLN</h1>
+                
+                <!-- Form Starts -->
+                <form class="form" method="POST" action="{{ route('loginloket') }}">
+                    @csrf
+                    
+                    <!-- Email Field -->
+                    <div class="flex-column">
+                        <label for="email">Email</label>
+                        <div class="inputForm">
+                            <input type="text" id="email" name="email" class="input" placeholder="Enter your Email" value="{{ old('email') }}" required>
+                        </div>
                     </div>
-                    <span class="span">Forgot password?</span>
-                </div>
 
-                <!-- Submit Button -->
-                <button type="submit" class="button-submit">Sign In</button>
+                    <!-- Password Field -->
+                    <div class="flex-column">
+                        <label for="password">Password</label>
+                        <div class="inputForm">
+                            <input type="password" id="password" name="password" class="input" placeholder="Enter your Password" required>
+                        </div>
+                    </div>
 
-                <!-- Sign Up Prompt -->
-                <p class="p">Don't have an account? <span class="span">Sign Up</span></p>
+                    <!-- Remember Me and Forgot Password -->
+                    <div class="flex-row">
+                        <div>
+                            <input type="checkbox" name="remember">
+                            <label>Remember me</label>
+                        </div>
+                        <span class="span">Forgot password?</span>
+                    </div>
 
-                <!-- Social Sign-In Buttons -->
-                <div class="flex-row">
-                </div>
-            </form>
+                    <!-- Submit Button -->
+                    <button type="submit" class="button-submit">Log In</button>
+                </form>
+            </div>
         </div>
-        <!-- Form Container End -->
     </div>
 </body>
 </html>
