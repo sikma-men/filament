@@ -42,7 +42,7 @@
         /* Background Image Section */
         .background {
             flex: 1;
-            background-image: url('https://th.bing.com/th/id/R.0865480b46f6403443b2a24f0d44a7dc?rik=xlLNA9Wx%2f%2fmHNQ&riu=http%3a%2f%2fwww.mse.co.id%2fassets-frontend%2fimg%2fblog%2fnews1.jpeg&ehk=4W29Baksr%2bEH2V4b8MazXzU88MIumf9dGY%2b9ctsnWfE%3d&risl=&pid=ImgRaw&r=0');
+            background-image: url('https://bisnistoday.co.id/wp-content/uploads/2021/12/C7F6E2DE-CD0F-428D-A695-AFC03EDE7A0A_1_201_a.jpeg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -134,7 +134,7 @@
         .flex-column {
             display: flex;
             flex-direction: column;
-            margin-bottom: 15px; /* Reduced margin for better spacing */
+            margin-bottom: 25px; /* Reduced margin for better spacing */
             font-weight: bold;
             text-align: left;
             color: #333;
@@ -167,12 +167,25 @@
                 font-size: 0.85rem;
             }
         }
+
+        /* Positioning the logo */
+        .pln-logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 90px; /* Set logo size */
+            height: auto;
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
         <!-- Background Image Section -->
         <div class="background"></div>
+
+        <!-- PLN Logo -->
+        <img src="https://1.bp.blogspot.com/-XjhgtORKCCE/XmD03YvnoeI/AAAAAAAABrE/5iqWTF-Cnvsi-DsuehAspe49AbWHqRjCACLcBGAsYHQ/s1600/Logo%2Bpln.png" alt="PLN Logo" class="pln-logo">
 
         <!-- Login Form Section -->
         <div class="login-container">
