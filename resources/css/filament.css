@@ -1,0 +1,124 @@
+:root {
+    /* Warna utama */
+    --primary-50: #eef2ff;
+    --primary-100: #e0e7ff;
+    --primary-200: #c7d2fe;
+    --primary-300: #a5b4fc;
+    --primary-400: #818cf8;
+    --primary-500: #6366f1; /* Warna utama */
+    --primary-600: #4f46e5;
+    --primary-700: #4338ca;
+    --primary-800: #3730a3;
+    --primary-900: #312e81;
+
+    /* Warna tambahan */
+    --sidebar-bg: #1e293b; /* Sidebar warna gelap */
+    --sidebar-hover: #334155;
+    --navbar-bg: #1e40af; /* Navbar warna biru */
+    --text-light: #e5e7eb;
+    --text-dark: #111827;
+}
+
+/* Styling Sidebar */
+.sidebar {
+    background-color: var(--sidebar-bg) !important;
+    color: var(--text-light);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar a {
+    color: var(--text-light);
+    transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: var(--sidebar-hover);
+    color: #ffffff;
+}
+
+/* Styling Navbar */
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tombol Utama */
+button.filament-button {
+    background-color: var(--primary-500) !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+button.filament-button:hover {
+    background-color: var(--primary-600) !important;
+}
+
+/* Kartu & Container */
+.filament-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabel Filament */
+.filament-table {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filament-table th {
+    background-color: var(--primary-500);
+    color: white;
+    font-weight: bold;
+}
+
+/* === Tampilan Login === */
+.filament-login-page {
+    background: linear-gradient(to right, #6366f1, #4338ca);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.filament-login-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    text-align: center;
+}
+
+.filament-login-card h2 {
+    color: var(--primary-700);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.filament-login-card input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.filament-login-card button {
+    width: 100%;
+    background-color: var(--primary-500);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filament-login-card button:hover {
+    background-color: var(--primary-600);
+}

@@ -18,3 +18,7 @@ Route::get('/pemakaian', [LoketController::class, 'pemakaian'])->name('pemakaian
 Route::get('/pemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('pemakaian.show');
 Route::post('/pemakaian/update-status', [LoketController::class, 'updateStatus'])->name('pemakaian.update-status');
 
+Route::get('/carinokontrol', function () {
+    return view('loket.cariNoKontrol');
+})->name('carinokontrol');
+
