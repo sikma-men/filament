@@ -85,13 +85,13 @@ class LoketController extends Controller
         'message' => 'Data tidak ditemukan!',
     ], 404);
 }
-public function downloadPDF($noKontrol)
-{
-    $pemakaian = Pemakaian::where('noKontrol', $noKontrol)->get();
+// public function downloadPDF($noKontrol)
+// {
+//     $pemakaian = Pemakaian::where('noKontrol', $noKontrol)->get();
 
-    $pdf = PDF::loadView('pemakaian.pdf', compact('pemakaian'));
-    return $pdf->download('pemakaian_' . $noKontrol . '.pdf');
-}
+//     $pdf = PDF::loadView('pemakaian.pdf', compact('pemakaian'));
+//     return $pdf->download('pemakaian_' . $noKontrol . '.pdf');
+// }
 
 
 }

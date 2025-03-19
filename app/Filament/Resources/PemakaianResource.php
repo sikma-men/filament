@@ -32,7 +32,7 @@ class PemakaianResource extends Resource
 
     protected static ?string $model = Pemakaian::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
 
     public static function form(Form $form): Form
     {
@@ -144,9 +144,9 @@ class PemakaianResource extends Resource
                     ->label('Status')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
-                        'Lunas' => 'success', // Warna hijau untuk status "Lunas"
-                        'Belum Lunas' => 'danger', // Warna merah untuk status "Belum Lunas"
-                        default => 'gray', // Warna default jika ada nilai lain,
+                        'Sudah Lunas' => 'success',
+                        'Belum Lunas' => 'danger',
+                        default => 'gray',
                     }),
             ])
             ->filters([])
