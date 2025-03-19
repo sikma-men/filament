@@ -18,7 +18,7 @@
         </div>
     </form>
 
-    @if($noKontrol)
+    @if(isset($noKontrol))
         <h4>Hasil Pencarian untuk No Kontrol: {{ $noKontrol }}</h4>
         @if($pemakaian->isEmpty())
             <p class="text-danger">Tidak ada data pemakaian untuk no kontrol ini.</p>
@@ -42,97 +42,59 @@
     @endif
 
     <!-- Modal Detail Pemakaian -->
- <!-- Modal Detail Pemakaian -->
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Detail Pemakaian</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Detail Pemakaian</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>No Pemakaian:</strong> <span id="detailNoPemakaian"></span></p>
+                    <p><strong>No Kontrol:</strong> <span id="detailNoKontrol"></span></p>
+                    <p><strong>Meter Awal:</strong> <span id="detailMeterAwal"></span></p>
+                    <p><strong>Meter Akhir:</strong> <span id="detailMeterAkhir"></span></p>
+                    <p><strong>Jumlah Pakai:</strong> <span id="detailJumlahPakai"></span> m³</p>
+                    <p><strong>Biaya Beban:</strong> Rp <span id="detailBiayaBeban"></span></p>
+                    <p><strong>Biaya Pemakaian:</strong> Rp <span id="detailBiayaPemakai"></span></p>
+                    <p><strong>Status:</strong> <span id="detailStatus" class="badge bg-danger"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-success" id="btnUbahStatus" onclick="updateStatus()">Ubah Status ke Sudah Lunas</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <p><strong>No Pemakaian:</strong> <span id="detailNoPemakaian"></span></p>
-                <p><strong>No Kontrol:</strong> <span id="detailNoKontrol"></span></p>
-                <p><strong>Meter Awal:</strong> <span id="detailMeterAwal"></span></p>
-                <p><strong>Meter Akhir:</strong> <span id="detailMeterAkhir"></span></p>
-                <p><strong>Jumlah Pakai:</strong> <span id="detailJumlahPakai"></span> m³</p>
-                <p><strong>Biaya Beban:</strong> Rp <span id="detailBiayaBeban"></span></p>
-                <p><strong>Biaya Pemakaian:</strong> Rp <span id="detailBiayaPemakai"></span></p>
-                <p><strong>Status:</strong> <span id="detailStatus" class="badge bg-danger"></span></p>
-                <p><strong>Dibuat:</strong> <span id="detailCreatedAt"></span></p>
-                <p><strong>Diupdate:</strong> <span id="detailUpdatedAt"></span></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-success" id="btnUbahStatus" onclick="updateStatus()">Ubah Status ke Sudah Lunas</button>
-            </div>
-
         </div>
     </div>
-</div>
 
+    <script>
+        let selectedNoPemakaian = null;
 
-<script>
-    let selectedNoPemakaian = null;
-
-    function showDetail(noPemakaian) {
-        $.ajax({
-            url: '/pemakaian/' + noPemakaian,
-            type: 'GET',
-            success: function(data) {
-                selectedNoPemakaian = data.noPemakaian; // Simpan noPemakaian
-
-                $('#detailNoPemakaian').text(data.noPemakaian);
-                $('#detailNoKontrol').text(data.noKontrol);
-                $('#detailMeterAwal').text(data.meter_awal);
-                $('#detailMeterAkhir').text(data.meter_akhir);
-                $('#detailJumlahPakai').text(data.jumlah_pakai);
-                $('#detailBiayaBeban').text(new Intl.NumberFormat('id-ID').format(data.biaya_beban_pemakai));
-                $('#detailBiayaPemakai').text(new Intl.NumberFormat('id-ID').format(data.biaya_pemakai));
-                $('#detailStatus').text(data.status);
-
-                if (data.status.toLowerCase() === 'sudah lunas') {
-                    $('#detailStatus').removeClass('bg-danger').addClass('bg-success');
-                    $('#btnUbahStatus').hide(); // Sembunyikan tombol jika sudah lunas
-                } else {
-                    $('#detailStatus').removeClass('bg-success').addClass('bg-danger');
-                    $('#btnUbahStatus').show(); // Tampilkan tombol jika belum lunas
+        function showDetail(noPemakaian) {
+            $.ajax({
+                url: '{{ url("/pemakaian") }}/' + noPemakaian,
+                type: 'GET',
+                success: function(data) {
+                    selectedNoPemakaian = data.noPemakaian;
+                    $('#detailNoPemakaian').text(data.noPemakaian);
+                    $('#detailNoKontrol').text(data.noKontrol);
+                    $('#detailMeterAwal').text(data.meter_awal);
+                    $('#detailMeterAkhir').text(data.meter_akhir);
+                    $('#detailJumlahPakai').text(data.jumlah_pakai);
+                    $('#detailBiayaBeban').text(new Intl.NumberFormat('id-ID').format(data.biaya_beban_pemakai));
+                    $('#detailBiayaPemakai').text(new Intl.NumberFormat('id-ID').format(data.biaya_pemakai));
+                    $('#detailStatus').text(data.status).removeClass('bg-danger bg-success').addClass(data.status === 'Sudah Lunas' ? 'bg-success' : 'bg-danger');
+                    $('#detailModal').modal('show');
                 }
+            });
+        }
 
-                $('#detailCreatedAt').text(data.created_at);
-                $('#detailUpdatedAt').text(data.updated_at);
-
-                $('#detailModal').modal('show');
-            },
-            error: function() {
-                alert('Gagal mengambil data.');
-            }
-        });
-    }
-
-    function updateStatus() {
-        if (!selectedNoPemakaian) return;
-
-        $.ajax({
-            url: '/pemakaian/update-status',
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                noPemakaian: selectedNoPemakaian
-            },
-            success: function(response) {
+        function updateStatus() {
+            $.post('{{ route("pemakaian.update-status") }}', {_token: '{{ csrf_token() }}', noPemakaian: selectedNoPemakaian}, function(response) {
                 alert(response.message);
                 $('#detailStatus').text('Sudah Lunas').removeClass('bg-danger').addClass('bg-success');
-                $('#btnUbahStatus').hide(); // Sembunyikan tombol setelah diubah menjadi lunas
-            },
-            error: function(response) {
-                alert('Gagal mengubah status.');
-            }
-        });
-    }
-</script>
-
-
-
+            });
+        }
+    </script>
 </body>
 </html>
