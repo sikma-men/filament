@@ -1,21 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pemakaian</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- PDF tools -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <!-- QR Code -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-</head>
+@extends('layouts.app')
+@section('content')
 <style>
     .bg-orange {
         background-color: orange !important;
@@ -54,7 +38,7 @@
     }
 </style>
 
-<body class="container mt-4">
+<body class="">
     <h2 class="mb-4">Cari Data Pemakaian</h2>
     <form action="{{ route('pemakaian') }}" method="GET" class="mb-4">
         <div class="input-group"><input type="text" name="no_kontrol" class="form-control"
@@ -153,7 +137,7 @@
                     $('#detailStatus').text(data.status)
                         .removeClass('bg-danger bg-success')
                         .addClass(data.status === 'Sudah Lunas' ? 'bg-success' : 'bg-danger');
- 
+
                     if (data.status === 'Sudah Lunas') {
                         $('#btnUbahStatus').hide();
                     } else {
@@ -205,5 +189,4 @@
         }
     </script>
 </body>
-
-</html>
+@endsection

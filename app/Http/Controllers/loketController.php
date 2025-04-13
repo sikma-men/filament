@@ -28,13 +28,15 @@ class LoketController extends Controller
 
     public function dashboard()
     {
+        return view('loket.dashboard');
+    }
+    public function laporankeuangan()
+    {
         $totalBiayaBeban = Pemakaian::sum('biaya_beban_pemakai');
         $totalBiayaPemakai = Pemakaian::sum('biaya_pemakai');
         $totalBiaya = $totalBiayaBeban + $totalBiayaPemakai;
-
-        return view('loket.dashboard', compact('totalBiayaBeban', 'totalBiayaPemakai', 'totalBiaya'));
+        return view('loket.laporankeuangan', compact('totalBiayaBeban', 'totalBiayaPemakai', 'totalBiaya'));
     }
-
 
     public function logout(Request $request)
     {
