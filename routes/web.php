@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // Route untuk menampilkan form login
-Route::get('', [LoketController::class, 'showLoginForm'])->name('loginloket');
+Route::get('/loginloket', [LoketController::class, 'showLoginForm'])->name('loginloket');
 
 // Route untuk memproses login
 Route::post('loginloket', [LoketController::class, 'loginloket']);
