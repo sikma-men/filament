@@ -9,7 +9,6 @@
 
     <!-- SweetAlert2 Script -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- Google Fonts (Poppins) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -203,11 +202,11 @@
             <!-- Form Container Start -->
             <div class="form-wrapper">
                 <h1>Loket PLN</h1>
-                
+
                 <!-- Form Starts -->
                 <form class="form" method="POST" action="{{ route('loginloket') }}">
                     @csrf
-                    
+
                     <!-- Email Field -->
                     <div class="flex-column">
                         <label for="email">Email</label>

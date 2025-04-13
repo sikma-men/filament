@@ -12,6 +12,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Actions\DropdownAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Actions\CreateAnotherAction;
 
 class PemakaianResource extends Resource
 {
@@ -33,7 +34,14 @@ class PemakaianResource extends Resource
     protected static ?string $model = Pemakaian::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
-
+    protected function getCreateFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction()
+                ->label('Simpan Data')
+                ->CreateAnotherLabel('Simpan Dan Tambah Lagi'),
+        ];
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -41,17 +49,73 @@ class PemakaianResource extends Resource
                 // Sembunyikan No Pemakaian
                 Forms\Components\Hidden::make('noPemakaian'),
 
+                // Input Bulan
+                Forms\Components\Select::make('bulan')
+                    ->label('Bulan')
+                    ->options([
+                        '01' => 'Januari',
+                        '02' => 'Februari',
+                        '03' => 'Maret',
+                        '04' => 'April',
+                        '05' => 'Mei',
+                        '06' => 'Juni',
+                        '07' => 'Juli',
+                        '08' => 'Agustus',
+                        '09' => 'September',
+                        '10' => 'Oktober',
+                        '11' => 'November',
+                        '12' => 'Desember',
+                    ])
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function (callable $set, callable $get) {
+                        $noKontrol = $get('noKontrol');
+                        $bulan = $get('bulan');
+                        $tahun = $get('tahun');
+
+                        if ($noKontrol && $bulan && $tahun) {
+                            $set('noPemakaian', $bulan . $tahun . $noKontrol);
+                        }
+                    }),
+
+                // Input Tahun
+                Forms\Components\TextInput::make('tahun')
+                    ->label('Tahun')
+                    ->numeric()
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function (callable $set, callable $get) {
+                        $noKontrol = $get('noKontrol');
+                        $bulan = $get('bulan');
+                        $tahun = $get('tahun');
+
+                        if ($noKontrol && $bulan && $tahun) {
+                            $set('noPemakaian', $bulan . $tahun . $noKontrol);
+                        }
+                    }),
+
                 // Input No Kontrol
                 Forms\Components\Select::make('noKontrol')
                     ->label('No Kontrol')
-                    ->options(\App\Models\Pelanggan::pluck('noKontrol', 'noKontrol')) // Ambil data pelanggan
+                    ->options(\App\Models\Pelanggan::pluck('noKontrol', 'noKontrol'))
                     ->searchable()
                     ->required()
-                    ->live() // Agar bisa digunakan untuk generate otomatis
-                    ->afterStateUpdated(
-                        fn(callable $set, callable $get) =>
-                        $set('noPemakaian', now()->format('mY') . $get('noKontrol'))
-                    ),
+                    ->live()
+                    ->afterStateUpdated(function (callable $set, callable $get, $state) {
+                        $bulan = $get('bulan');
+                        $tahun = $get('tahun');
+
+                        if ($bulan && $tahun && $state) {
+                            $set('noPemakaian', $bulan . $tahun . $state);
+                        }
+
+                        // Cek pemakaian terakhir berdasarkan noKontrol
+                        $lastPemakaian = Pemakaian::where('noKontrol', $state)
+                            ->latest('created_at')
+                            ->first();
+
+                        $set('meter_awal', $lastPemakaian?->meter_akhir ?? 0);
+                    }),
 
                 // Input Meter Awal
                 Forms\Components\TextInput::make('meter_awal')
@@ -87,12 +151,10 @@ class PemakaianResource extends Resource
                                 $biaya_beban_pemakai = $tarif->biayabeban;
                                 $set('biaya_beban_pemakai', $biaya_beban_pemakai);
                             } else {
-                                // Jika tarif tidak ditemukan, set nilai default
                                 $set('biaya_pemakai', 0);
                                 $set('biaya_beban_pemakai', 0);
                             }
                         } else {
-                            // Jika pelanggan tidak ditemukan, set nilai default
                             $set('biaya_pemakai', 0);
                             $set('biaya_beban_pemakai', 0);
                         }
@@ -128,6 +190,26 @@ class PemakaianResource extends Resource
                     ])
                     ->required(),
             ]);
+    }
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['noPemakaian', 'noKontrol', 'bulan', 'tahun'];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+    public static function getEloquentModel(): string
+    {
+        return parent::getEloquentModel();
+    }
+    public static function getEloquentModelLabel(): string
+    {
+        return 'Data Pemakaian';
     }
 
     public static function table(Table $table): Table

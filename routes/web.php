@@ -12,12 +12,15 @@ Route::post('loginloket', [LoketController::class, 'loginloket']);
 // Route untuk logout
 Route::post('/logout', [LoketController::class, 'logout'])->name('logout');
 
-// Route untuk dashboard (dilindungi middleware auth:loket)
 Route::middleware('auth:loket')->group(function () {
     Route::get('/dashboard-loket', [LoketController::class, 'dashboard'])->name('loket.dashboard');
-
-    // Route untuk pencarian dan pengelolaan pemakaian
     Route::get('/pemakaian', [LoketController::class, 'pemakaian'])->name('pemakaian');
     Route::get('/pemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('pemakaian.show');
     Route::post('/pemakaian/update-status', [LoketController::class, 'updateStatus'])->name('pemakaian.update-status');
+    Route::get('/carinokontrol', function () {
+        return view('loket.carinokontrol');
+    })->name('carinokontrol');
+    // Route::get('laporan', function() {
+    //     return view('loket.LaporanKeuangan');
+    // })->name('laporan');
 });
