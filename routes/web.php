@@ -12,6 +12,12 @@ Route::post('loginloket', [LoketController::class, 'loginloket']);
 // Route untuk logout
 Route::post('/logout', [LoketController::class, 'logout'])->name('logout');
 
+Route::get('/', function () {
+    return view('loket.dashboard');
+});
+// Route::get('/carinokontrol', function () {
+//     return view('loket.cariNoKontrol');
+// })->name('loket.carinokontrol');
 Route::middleware('auth:loket')->group(function () {
     Route::get('/dashboard-loket', [LoketController::class, 'dashboard'])->name('loket.dashboard');
     Route::get('/pemakaian', [LoketController::class, 'pemakaian'])->name('pemakaian');

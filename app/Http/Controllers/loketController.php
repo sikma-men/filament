@@ -22,7 +22,8 @@ class LoketController extends Controller
         ]);
 
         if (Auth::guard('loket')->attempt($request->only('email', 'password'))) {
-            return redirect()->route('loket.dashboard');
+            return redirect()->route('carinokontrol')
+                ->with('success', 'Login berhasil!');
         }
 
         return redirect()->route('loginloket')->with('error', 'Email atau password salah!');
@@ -83,47 +84,47 @@ class LoketController extends Controller
     {
         $totalBiayaPemakaianR1 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'R-1')
+        ->where('pelanggan.jenis_plg', 'R-1')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianR2 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'R-2')
+        ->where('pelanggan.jenis_plg', 'R-2')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianR3 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'R-3')
+        ->where('pelanggan.jenis_plg', 'R-3')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianB1 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'B-1')
+        ->where('pelanggan.jenis_plg', 'B-1')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianB2 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'B-2')
+        ->where('pelanggan.jenis_plg', 'B-2')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianB3 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'B-3')
+        ->where('pelanggan.jenis_plg', 'B-3')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianI2 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'I-2')
+        ->where('pelanggan.jenis_plg', 'I-2')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianI3 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'I-3')
+        ->where('pelanggan.jenis_plg', 'I-3')
         ->sum('pemakaian.biaya_pemakai');
 
     $totalBiayaPemakaianI4 = DB::table('pemakaian')
         ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_pelanggan', 'I-4')
+        ->where('pelanggan.jenis_plg', 'I-4')
         ->sum('pemakaian.biaya_pemakai');
 
 

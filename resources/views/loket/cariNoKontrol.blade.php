@@ -116,7 +116,7 @@
 
         function showDetail(noPemakaian) {
             $.ajax({
-                url: '{{ url('/pemakaian') }}/' + noPemakaian,
+                url: "{{ url('/pemakaian') }}/" + noPemakaian,
                 type: 'GET',
                 success: function(data) {
                     selectedNoPemakaian = data.noPemakaian;
@@ -157,7 +157,7 @@
         }
 
         function updateStatus() {
-            $.post('{{ route('pemakaian.update-status') }}', {
+            $.post("{{ route('pemakaian.update-status')}}",{
                 _token: '{{ csrf_token() }}',
                 noPemakaian: selectedNoPemakaian
             }, function(response) {
