@@ -40,7 +40,7 @@ class LoketController extends Controller
         Auth::guard('loket')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('loginloket');
+        return redirect()->route('login');
     }
 
     public function pemakaian(Request $request)

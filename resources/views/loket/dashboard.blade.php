@@ -143,7 +143,7 @@
                         Dari Indonesia, kami hadirkan energi yang menghubungkan setiap orang, membuka jalan untuk kemudahan,
                         keberlanjutan, dan inovasi bagi masa depan yang lebih baik.
                     </div>
-                    <a href="{{'loginloket'}}" class="btn btn-primary">Cek Data Pemakaian</a>
+                    <a href="{{'login'}}" class="btn btn-primary">Cek Data Pemakaian</a>
                 </div>
 
                 <!-- Kanan: Gambar pekerja -->

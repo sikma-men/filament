@@ -1,13 +1,14 @@
 <?php
+
 use App\Http\Controllers\LoketController;
 use Illuminate\Support\Facades\Route;
 
 
 // Route untuk menampilkan form login
-Route::get('/loginloket', [LoketController::class, 'showLoginForm'])->name('loginloket');
+Route::get('/login', [LoketController::class, 'showLoginForm'])->name('login');
 
 // Route untuk memproses login
-Route::post('loginloket', [LoketController::class, 'loginloket']);
+Route::post('login', [LoketController::class, 'loginloket']);
 
 // Route untuk logout
 Route::post('/logout', [LoketController::class, 'logout'])->name('logout');
@@ -27,4 +28,6 @@ Route::middleware('auth:loket')->group(function () {
         return view('loket.carinokontrol');
     })->name('carinokontrol');
     Route::get('/laporankeuangan', [LoketController::class, 'laporankeuangan'])->name('laporankeuangan');
+    Route::get('/laporankeseluruhan', [LoketController::class, 'keseluruhan'])->name('laporankeseluruhan');
+    Route::get('/laporanjenis', [LoketController::class, 'jenisPelanggan'])->name('laporanjenis');
 });
