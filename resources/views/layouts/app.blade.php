@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PLN</title>
     <link rel="icon" type="image/jpg" href="{{ asset('img/logo_pln.jpg') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <!-- Font Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome (untuk ikon) -->
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -20,70 +18,16 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .ahover {
-            text-decoration: none;
-            color: white;
-            background-color: transparent;
-            transition: 0.3s;
-            border-radius: 20px;
-            padding: 10px 20px;
-            display: inline-block;
-            z-index: 2;
-            margin-right: 10px;
-            margin-left: 20px;
-        }
-
-        /* Efek ketika hover pada .ahover */
-        .ahover:hover {
-            text-decoration: none;
-            background-color: gray !important;
-            color: white;
-            z-index: 3;
-            transform: scale(1.05);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .after {
-            text-decoration: none;
-            color: white;
-            background-color: gray !important;
-            transition: 0.3s;
-            border-radius: 20px;
-            padding: 10px 20px;
-            display: inline-block;
-            z-index: 2;
-        }
-
-        .before {
-            text-decoration: none;
-            color: white;
-            background-color: gray !important;
-            transition: 0.3s;
-            border-radius: 20px;
-            padding: 10px 20px;
-            display: inline-block;
-            z-index: 2;
-        }
-
-        .before {
-            background-color: #343a40 !important;
-            color: white;
-        }
-
         .custom-navbar {
             margin: 10px;
             border-radius: 10px;
             height: 100px;
-            overflow: visible;
-            /* Pastikan overflow diatur ke visible */
             position: relative;
-            /* Pastikan navbar punya positioning untuk dropdown */
             z-index: 1;
-            /* Pastikan navbar berada di bawah dropdown */
+            box-shadow: 30px 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
-            font-family: 'Poppins', sans-serif;
             font-weight: 1000;
             font-size: 40px;
             color: #00aeef !important;
@@ -97,7 +41,6 @@
             left: 175px;
             transform: translateY(-50%);
             width: 500px;
-            height: auto;
             overflow: hidden;
             white-space: nowrap;
             z-index: 1;
@@ -108,7 +51,6 @@
             color: white;
             font-size: 20px;
             white-space: nowrap;
-            transition: none;
         }
 
         .logout-icon {
@@ -117,12 +59,64 @@
             margin-right: 5px;
         }
 
+        /* Link dasar */
+        .before,
+        .after {
+            color: white;
+            background-color: transparent;
+            border-radius: 10px;
+            padding: 10px 20px;
+            display: inline-block;
+            text-decoration: none;
+            position: relative;
+            margin-right: 30px;
+        }
+
+        /* Aktif - garis bawah putih */
+ /* Aktif - garis bawah putih */
+.after::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 2px;
+    background-color: white;
+    border-radius: 2px;
+}
+
+/* Hover untuk non-aktif link */
+.before::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0%;
+    height: 2px;
+    background-color: white;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.before:hover::after {
+    width: 40%;
+}
+
+
+        /* Hover efek tambahan */
+        .ahover:hover {
+            text-decoration: none;
+            color: white;
+            transform: scale(1.05);
+            transition: all 0.3s ease-in-out;
+        }
+
         .nav-item.dropdown .dropdown-menu {
             position: absolute;
             z-index: 9999;
-            /* Dropdown berada di atas navbar */
             top: 100%;
-            /* Dropdown muncul di bawah navbar */
             left: -80px;
         }
     </style>
@@ -138,13 +132,10 @@
             function animateMarquee(time) {
                 const delta = (time - lastTime) / 1000;
                 lastTime = time;
-
-                const speed = 100; // pixel per second
+                const speed = 100;
                 lastPos -= delta * speed;
 
-                // Reset posisi jika sudah lewat batas lebar teks
                 const resetAt = -marquee.offsetWidth;
-
                 if (lastPos < resetAt) {
                     lastPos = marquee.parentElement.offsetWidth;
                 }
@@ -157,6 +148,7 @@
             requestAnimationFrame(animateMarquee);
         });
     </script>
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark custom-navbar">
         <img src="{{ asset('img/logo_pln.jpg') }}" alt="Logo PLN" height="50px" class="mr-2 ml-2" style="border-radius: 5px;">
         <a class="navbar-brand" href="#">P L N</a>
@@ -166,20 +158,24 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item costum-li">
-                    <a class="{{ request()->is('carinokontrol') ? 'after' :'before' }} ahover" href="{{ route('carinokontrol') }}">Cari Data Pemakaian</a>
+                    <a class="{{ request()->is('carinokontrol') ? 'after' : 'before' }} ahover" href="{{ route('carinokontrol') }}">
+                        Cari Data Pemakaian
+                    </a>
                 </li>
-                <li class="nav-item costum-li">
-                    <a class="{{ request()->is('laporankeuangan') ? 'after' :'before' }} ahover" href="{{ route('laporankeuangan') }}">Laporan Keuangan</a>
+                <li class="nav-item costum-li mr-4">
+                    <a class="{{ request()->is('laporankeuangan') ? 'after' : 'before' }} ahover" href="{{ route('laporankeuangan') }}">
+                        Laporan Keuangan
+                    </a>
                 </li>
                 <li class="nav-item dropdown costum-li">
-                    <!-- Dropdown untuk ikon profil -->
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                         <i class="fas fa-user-circle logout-icon"></i>
                     </a>
-                    <div class="dropdown-menu" style="" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">Profile</a>
                         <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                     </div>
@@ -188,7 +184,7 @@
         </div>
     </nav>
 
-    <div class="container mt-4">@yield('content') </div>
+    <div class="container mt-4">@yield('content')</div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
