@@ -162,12 +162,12 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item costum-li">
-                    <a class="{{ request()->is('carinokontrol') ? 'after' : 'before' }} ahover" href="{{ route('carinokontrol') }}">
+                    <a class="{{ request()->is('loket/pemakaian') ? 'after' : 'before' }} ahover" href="{{ route('loket.pemakaian') }}">
                         Cari Data Pemakaian
                     </a>
                 </li>
                 <li class="nav-item costum-li mr-4">
-                    <a class="{{ request()->is('laporankeuangan') ? 'after' : 'before' }} ahover" href="{{ route('laporankeuangan') }}">
+                    <a class="{{ request()->is('loket/laporankeuangan') ? 'after' : 'before' }} ahover" href="{{ route('loket.laporankeuangan') }}">
                         Laporan Keuangan
                     </a>
                 </li>
@@ -177,7 +177,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                        <a class="dropdown-item" href="{{ route('loket.logout') }}">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -185,6 +185,7 @@
     </nav>
 
     <div class="container mt-4">@yield('content')</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

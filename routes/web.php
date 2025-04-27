@@ -3,31 +3,35 @@
 use App\Http\Controllers\LoketController;
 use Illuminate\Support\Facades\Route;
 
-
 // Route untuk menampilkan form login
-Route::get('/login', [LoketController::class, 'showLoginForm'])->name('login');
+Route::get('/loket/login', [LoketController::class, 'showLoginForm'])->name('loket.login');
 
 // Route untuk memproses login
-Route::post('login', [LoketController::class, 'loginloket']);
+Route::post('/loket/login', [LoketController::class, 'loginloket']);
 
 // Route untuk logout
-Route::post('/logout', [LoketController::class, 'logout'])->name('logout');
+Route::post('/loket/logout', [LoketController::class, 'logout'])->name('loket.logout');
 
-Route::get('/', function () {
-    return view('loket.dashboard');
+// Route root langsung redirect ke dashboard loket (optional bisa disesuaikan)
+Route::get('/loket', function () {
+    return redirect()->route('loket.dashboard');
 });
-// Route::get('/carinokontrol', function () {
-//     return view('loket.cariNoKontrol');
-// })->name('loket.carinokontrol');
-Route::middleware('auth:loket')->group(function () {
-    Route::get('/dashboard-loket', [LoketController::class, 'dashboard'])->name('loket.dashboard');
-    Route::get('/pemakaian', [LoketController::class, 'pemakaian'])->name('pemakaian');
-    Route::get('/pemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('pemakaian.show');
-    Route::post('/pemakaian/update-status', [LoketController::class, 'updateStatus'])->name('pemakaian.update-status');
-    Route::get('/carinokontrol', function () {
+
+// Group semua yang butuh auth loket
+Route::prefix('loket')->middleware('auth:loket')->group(function () {
+    Route::get('/dashboard', [LoketController::class, 'dashboard'])->name('loket.dashboard');
+    Route::get('/pemakaian', [LoketController::class, 'pemakaian'])->name('loket.pemakaian');
+    Route::post('/pemakaian/update-status', [LoketController::class, 'updateStatus'])->name('loket.pemakaian.update-status');
+
+    Route::get('/pemakaian', function () {
         return view('loket.carinokontrol');
-    })->name('carinokontrol');
-    Route::get('/laporankeuangan', [LoketController::class, 'laporankeuangan'])->name('laporankeuangan');
-    Route::get('/laporankeseluruhan', [LoketController::class, 'keseluruhan'])->name('laporankeseluruhan');
-    Route::get('/laporanjenis', [LoketController::class, 'jenisPelanggan'])->name('laporanjenis');
+    })->name('loket.pemakaian');
+
+    Route::get('/detailpemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('loket.detailpemakaian');
+    Route::get('/pemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('loket.pemakaian.detail');
+
+    Route::get('/laporan', [LoketController::class, 'laporan'])->name('loket.laporan');
+    Route::get('/laporankeuangan', [LoketController::class, 'laporankeuangan'])->name('loket.laporankeuangan');
+    Route::get('/laporankeseluruhan', [LoketController::class, 'keseluruhan'])->name('loket.laporankeseluruhan');
+    Route::get('/laporanjenis', [LoketController::class, 'jenisPelanggan'])->name('loket.laporanjenis');
 });

@@ -57,17 +57,16 @@
     <div class="sidebar navbar-dark bg-dark">
         <ul class="navbar-nav w-100">
             <li class="nav-item text-center costum-nav-item">
-                <a class="nav-link {{ request()->routeIs('laporankeseluruhan') ? 'active' : '' }}" href="{{ route('laporankeseluruhan') }}">
+                <a class="nav-link {{ request()->routeIs('loket/laporankeseluruhan') ? 'active' : '' }}" href="{{ route('loket.laporankeseluruhan') }}">
                     Keseluruhan
                 </a>
             </li>
             <li class="nav-item text-center costum-nav-item">
-                <a class="nav-link {{ request()->routeIs('laporanjenis') ? 'active' : '' }}" href="{{ route('laporanjenis') }}">
+                <a class="nav-link {{ request()->routeIs('loket/laporanjenis') ? 'active' : '' }}" href="{{ route('loket.laporanjenis') }}">
                     Berdasarkan<br>Jenis Pelanggan
                 </a>
             </li>
         </ul>
-    </div>
 
     <!-- Main Content -->
     <div class="content">

@@ -34,7 +34,6 @@ class LoketController extends Controller
         return view('loket.dashboard');
     }
 
-
     public function logout(Request $request)
     {
         Auth::guard('loket')->logout();
@@ -46,16 +45,39 @@ class LoketController extends Controller
     public function pemakaian(Request $request)
     {
         $noKontrol = $request->input('no_kontrol');
-        $pemakaian = $noKontrol ? Pemakaian::where('noKontrol', $noKontrol)->get() : collect([]);
+        $status = $request->input('status');
+
+        $pemakaian = collect([]);
+
+        if ($noKontrol) {
+            $query = Pemakaian::where('noKontrol', $noKontrol);
+
+            if ($status) {
+                $query->where('status', $status);
+            }
+
+            $pemakaian = $query->get();
+        }
 
         return view('loket.cariNoKontrol', compact('pemakaian', 'noKontrol'));
     }
 
     public function show($noPemakaian)
     {
-        return response()->json(Pemakaian::where('noPemakaian', $noPemakaian)->firstOrFail());
+        $data = Pemakaian::where('noPemakaian', $noPemakaian)->first();
+
+        if (!$data) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
+        return response()->json($data);
     }
 
+    public function laporan()
+    {
+        $pemakaian = Pemakaian::all();
+        return view('loket.laporan', compact('pemakaian'));
+    }
 
     public function updateStatus(Request $request)
     {
@@ -80,65 +102,80 @@ class LoketController extends Controller
             'message' => 'Data tidak ditemukan!',
         ], 404);
     }
+
     public function laporankeuangan()
     {
         $totalBiayaPemakaianR1 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'R-1')
-        ->sum('pemakaian.biaya_pemakai');
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'R-1')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianR2 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'R-2')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianR2 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'R-2')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianR3 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'R-3')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianR3 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'R-3')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianB1 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'B-1')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianB1 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'B-1')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianB2 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'B-2')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianB2 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'B-2')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianB3 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'B-3')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianB3 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'B-3')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianI2 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'I-2')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianI2 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'I-2')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianI3 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'I-3')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianI3 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'I-3')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-    $totalBiayaPemakaianI4 = DB::table('pemakaian')
-        ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
-        ->where('pelanggan.jenis_plg', 'I-4')
-        ->sum('pemakaian.biaya_pemakai');
+        $totalBiayaPemakaianI4 = DB::table('pemakaian')
+            ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+            ->where('pelanggan.jenis_pelanggan', 'I-4')
+            ->where('pemakaian.status', 'sudah lunas')
+            ->sum('pemakaian.biaya_pemakai');
 
-
-        $totalBiayaBeban = Pemakaian::sum('biaya_beban_pemakai');
-        $totalBiayaPemakai = Pemakaian::sum('biaya_pemakai');
+        $totalBiayaBeban = Pemakaian::where('status', 'sudah lunas')->sum('biaya_beban_pemakai');
+        $totalBiayaPemakai = Pemakaian::where('status', 'sudah lunas')->sum('biaya_pemakai');
         $totalBiaya = $totalBiayaBeban + $totalBiayaPemakai;
-        return view('loket.laporankeuangan', compact('totalBiayaBeban', 'totalBiayaPemakai', 'totalBiaya', 'totalBiayaPemakaianR1',
-        'totalBiayaPemakaianR2',
-        'totalBiayaPemakaianR3',
-        'totalBiayaPemakaianB1',
-        'totalBiayaPemakaianB2',
-        'totalBiayaPemakaianB3',
-        'totalBiayaPemakaianI2',
-        'totalBiayaPemakaianI3',
-        'totalBiayaPemakaianI4',));
+
+        return view('loket.laporankeuangan', compact(
+            'totalBiayaBeban',
+            'totalBiayaPemakai',
+            'totalBiaya',
+            'totalBiayaPemakaianR1',
+            'totalBiayaPemakaianR2',
+            'totalBiayaPemakaianR3',
+            'totalBiayaPemakaianB1',
+            'totalBiayaPemakaianB2',
+            'totalBiayaPemakaianB3',
+            'totalBiayaPemakaianI2',
+            'totalBiayaPemakaianI3',
+            'totalBiayaPemakaianI4'
+        ));
     }
 }

@@ -204,7 +204,7 @@
                 <h1>Loket PLN</h1>
 
                 <!-- Form Starts -->
-                <form class="form" method="POST" action="{{ route('login') }}">
+                <form class="form" method="POST" action="{{ route('loket.login') }}">
                     @csrf
 
                     <!-- Email Field -->

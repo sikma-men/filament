@@ -1,192 +1,280 @@
 @extends('layouts.app')
 @section('content')
-<style>
-    .bg-orange {
-        background-color: orange !important;
-    }
 
-    .card-hover {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    <style>
+        /* CSS yang kamu punya */
+        .bg-orange {
+            background-color: orange !important;
+        }
 
-    .card-hover:hover {
-        transform: scale(1.03);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .shadow {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+        .card-hover:hover {
+            transform: scale(1.01);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
 
-    .border {
-        border-radius: 5px;
-    }
+        .card-detail {
+            margin-top: 10px;
+            padding: 2px 6px;
+            border: 2px dashed orange;
+            border-radius: 10px;
+            color: orange;
+            transition: 0.5s ease;
+            text-align: center;
+        }
 
-    .card-detail {
-        margin-right: 214px;
-        padding: 1px 1px 1px 3px;
-        border: 2px dashed orange;
-        border-radius: 10px;
-        color: orange;
-        transition: background-color 0.5s ease, color 0.5s ease;
-    }
+        .card-detail:hover {
+            background-color: orange;
+            color: white;
+        }
 
-    .card-detail:hover {
-        background-color: orange;
-        color: white;
-        transition: background-color 0.5s ease, color 0.5s ease;
-    }
-</style>
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
 
-<body class="">
-    <h2 class="mb-4">Cari Data Pemakaian</h2>
-    <form action="{{ route('pemakaian') }}" method="GET" class="mb-4">
-        <div class="input-group"><input type="text" name="no_kontrol" class="form-control"
-                placeholder="Masukkan No Kontrol" value="{{ request('no_kontrol') }}"><button type="submit"
-                class="btn bg-orange">Cari</button></div>
-    </form>
-    @if (isset($noKontrol))
-        @if ($pemakaian->isEmpty())
-            <p class="text-danger">Tidak ada data pemakaian untuk no kontrol ini.</p>
-        @else
-            <div class="row">
-                @foreach ($pemakaian as $p)
-                    <div class="col-md-4">
-                        <div class="card mb-3 card-hover shadow" style="cursor: pointer;"
-                            onclick="showDetail('{{ $p->noPemakaian }}')">
-                            <div class="card-body">
-                                <h5 class="card-title">No Pemakaian: {{ $p->noPemakaian }}</h5>
-                                <p class="card-text">Meter Awal: {{ $p->meter_awal }} KWH</p>
-                                <p class="card-text">Meter Akhir: {{ $p->meter_akhir }} KWH</p>
-                                <p class="card-text">Jumlah Pakai: <strong>{{ $p->jumlah_pakai }}</strong> KWH</p>
-                                <p class="card-detail"><small>Klik untuk detail</small></p>
-                            </div>
-                        </div>
+        .filter-btn:focus,
+        .filter-btn:active {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .filter-btn {
+            position: relative;
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .filter-btn:hover {
+            color: orange;
+        }
+
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: orange;
+            transition: width 0.3s;
+        }
+
+        .filter-btn.underline::after {
+            width: 100%;
+        }
+
+        .filter-btn.noneunderline::after {
+            width: 0;
+        }
+
+        .filter-btn:hover::after {
+            width: 100%;
+        }
+
+        .margin {
+            margin: 0 160px;
+        }
+    </style>
+
+    <div class="container my-4">
+
+        <!-- Search Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form action="{{ route('loket.pemakaian') }}" method="GET">
+                    {{-- ⬇️ Di sini kita set default Sudah Lunas --}}
+                    <input type="hidden" name="status" value="{{ request('status') ?? 'Sudah Lunas' }}">
+                    <div class="input-group">
+                        <input type="text" name="no_kontrol" class="form-control" placeholder="Cari No Kontrol..."
+                            value="{{ request('no_kontrol') }}">
+                        <button class="btn bg-orange text-white" type="submit">
+                            <i class="fas fa-search"></i> Cari
+                        </button>
                     </div>
-                @endforeach
+                </form>
             </div>
-        @endif
-    @endif
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-orange text-white">
-                    <h5 class="modal-title" id="modalLabel">Kwitansi Pembayaran Pemakaian Listrik</h5><button
-                        type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="filter-buttons mt-3">
+            <button type="button" onclick="filterStatus('Sudah Lunas')"
+                class="filter-btn {{ (request('status') ?? 'Sudah Lunas') == 'Sudah Lunas' ? 'underline' : 'noneunderline' }}">
+                Sudah Lunas
+            </button>
+            <div class="margin"></div>
+            <button type="button" onclick="filterStatus('Belum Lunas')"
+                class="filter-btn {{ (request('status') ?? 'Sudah Lunas') == 'Belum Lunas' ? 'underline' : 'noneunderline' }}">
+                Belum Lunas
+            </button>
+        </div>
+        <div class="d-flex align-items-center my-1">
+            <hr class="flex-grow-1">
+            {{-- <span class="mx-3 text-muted" style="white-space: nowrap;"></span> --}}
+            <hr class="flex-grow-1">
+        </div>
+        <!-- Data Pemakaian -->
+        @if (isset($noKontrol))
+            @if ($pemakaian->isEmpty())
+                <p class="text-danger text-center">Tidak ada data pemakaian untuk No Kontrol ini.</p>
+            @else
+                <div class="row mt-4">
+                    @foreach ($pemakaian as $p)
+                        <div class="col-md-4 mb-4">
+                            <div class="card card-hover shadow-sm" style="cursor: pointer;"
+                                onclick="showDetail('{{ $p->noPemakaian }}')">
+                                <div class="card-body">
+                                    <h5 class="card-title">No Pemakaian: {{ $p->noPemakaian }}</h5>
+                                    <p class="card-text">Meter Awal: {{ $p->meter_awal }} KWH</p>
+                                    <p class="card-text">Meter Akhir: {{ $p->meter_akhir }} KWH</p>
+                                    <p class="card-text">Jumlah Pakai: <strong>{{ $p->jumlah_pakai }}</strong> KWH</p>
+                                    <p class="card-detail"><small>Klik untuk detail</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="modal-body p-4" style="font-family: 'Courier New', Courier, monospace;">
-                    <div class="border border-dark p-3 rounded" id="kwitansiContent">
-                        <div class="d-flex justify-content-between align-items-start mb-3"><img
-                                src="{{ asset('img/logo_pln.jpg') }}" alt="Logo PLN" style="width: 80px; height: auto;">
-                            <div class="ms-3 flex-grow-1">
-                                <p><strong>Status:</strong><span id="detailStatus" class="badge bg-danger"></span>
-                                </p>
-                                <p><strong>No Pemakaian:</strong><span id="detailNoPemakaian"></span></p>
-                                <p><strong>No Kontrol:</strong><span id="detailNoKontrol"></span></p>
-                            </div>
-                            <div id="qrcode"></div>
-                        </div>
-                        <hr>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <p>Meter Awal: <span id="detailMeterAwal"></span>KWH</p>
-                                <p>Meter Akhir: <span id="detailMeterAkhir"></span>KWH</p>
-                                <p>Jumlah Pakai: <strong><span id="detailJumlahPakai"></span></strong> KWH</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Biaya Beban: Rp <span id="detailBiayaBeban"></span></p>
-                                <p>Biaya Pemakaian: Rp <span id="detailBiayaPemakai"></span></p>
-                                <p><strong>Total Biaya: Rp <span id="detailTotalBiaya"></span></strong></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <p class="text-center fst-italic">Terima kasih telah melakukan pembayaran. Simpan kwitansi
-                            ini sebagai bukti pembayaran yang sah. Jika ada kesalahan laporkan ke nomor 58%</p>
+            @endif
+        @endif
+
+    </div>
+
+    <!-- Modal Detail -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content" id="kwitansiArea" style="padding: 20px;">
+                <div class="modal-body" style="background: white; position: relative;">
+                    <img src="{{ asset('img/logo_pln.jpg') }}" alt="Logo PLN"
+                        style="position: absolute; top: 20px; left: 20px; width: 80px; height: auto;">
+                    <!-- QR Code -->
+                    <div id="qrcode" style="position: absolute; top: 20px; right: 20px;"></div>
+
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+                        <h4><strong>PEMERINTAH KABUPATEN CIAMIS</strong></h4>
+                        <h5>KWITANSI PEMBAYARAN LISTRIK</h5>
+                    </div>
+
+                    <!-- Body Content -->
+                    <div class="d-flex justify-content-between"
+                        style="font-family: 'Courier New', Courier, monospace; font-size: 16px;">
+                        <div id="leftDetail" style="width: 48%;"></div>
+                        <div id="rightDetail" style="width: 48%;"></div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <small>Terima kasih atas pembayaran Anda.</small>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-between"><button type="button" class="btn btn-outline-dark"
-                        onclick="generatePDF()">Cetak PDF</button><button type="button" class="btn btn-success"
-                        id="btnUbahStatus" onclick="updateStatus()">Ubah Status ke Sudah Lunas</button></div>
+
+                <!-- Footer tombol download/tutup -->
+                <div class="modal-footer">
+                    <button onclick="downloadKwitansi()" class="btn btn-success no-print">Download Gambar</button>
+                    <button onclick="closeModal()" class="btn btn-danger no-print" data-bs-dismiss="modal">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Script -->
     <script>
-        let selectedNoPemakaian = null;
-
         function showDetail(noPemakaian) {
-            $.ajax({
-                url: "{{ url('/pemakaian') }}/" + noPemakaian,
-                type: 'GET',
-                success: function(data) {
-                    selectedNoPemakaian = data.noPemakaian;
-                    $('#detailNoPemakaian').text(data.noPemakaian);
-                    $('#detailNoKontrol').text(data.noKontrol);
-                    $('#detailMeterAwal').text(data.meter_awal);
-                    $('#detailMeterAkhir').text(data.meter_akhir);
-                    $('#detailJumlahPakai').text(data.jumlah_pakai);
+            fetch(`/detailpemakaian/${noPemakaian}`)
+                .then(response => response.json())
+                .then(data => {
+                    const leftDetail = `
+                    <p><strong>No Pemakaian:</strong> ${data.noPemakaian}</p>
+                    <p><strong>No Kontrol:</strong> ${data.noKontrol}</p>
+                    <p><strong>Meter Awal:</strong> ${data.meter_awal} KWH</p>
+                    <p><strong>Meter Akhir:</strong> ${data.meter_akhir} KWH</p>
+                `;
 
-                    const biayaBeban = parseFloat(data.biaya_beban_pemakai);
-                    const biayaPemakai = parseFloat(data.biaya_pemakai);
-                    const total = biayaBeban + biayaPemakai;
+                    const rightDetail = `
+                    <p><strong>Jumlah Pakai:</strong> ${data.jumlah_pakai} KWH</p>
+                    <p><strong>Biaya Pemakai:</strong> Rp ${formatRupiah(data.biaya_pemakai)}</p>
+                    <p><strong>Biaya Beban:</strong> Rp ${formatRupiah(data.biaya_beban_pemakai)}</p>
+                    <p><strong>Status:</strong> ${data.status}</p>
+                `;
 
-                    $('#detailBiayaBeban').text(new Intl.NumberFormat('id-ID').format(biayaBeban));
-                    $('#detailBiayaPemakai').text(new Intl.NumberFormat('id-ID').format(biayaPemakai));
-                    $('#detailTotalBiaya').text(new Intl.NumberFormat('id-ID').format(total));
+                    document.getElementById('leftDetail').innerHTML = leftDetail;
+                    document.getElementById('rightDetail').innerHTML = rightDetail;
 
-                    $('#detailStatus').text(data.status)
-                        .removeClass('bg-danger bg-success')
-                        .addClass(data.status === 'Sudah Lunas' ? 'bg-success' : 'bg-danger');
-
-                    if (data.status === 'Sudah Lunas') {
-                        $('#btnUbahStatus').hide();
-                    } else {
-                        $('#btnUbahStatus').show();
-                    }
-
-                    $('#qrcode').empty();
-                    new QRCode(document.getElementById("qrcode"), {
+                    // QR Code
+                    document.getElementById('qrcode').innerHTML = "";
+                    new QRCode(document.getElementById('qrcode'), {
                         text: data.noPemakaian,
                         width: 80,
                         height: 80
                     });
 
-                    $('#detailModal').modal('show');
-                }
+                    // Show modal
+                    const myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+                    myModal.show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Gagal mengambil data!');
+                });
+        }
+
+        function formatRupiah(angka) {
+            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function downloadKwitansi() {
+            const kwitansiArea = document.getElementById('kwitansiArea');
+            const buttons = kwitansiArea.querySelectorAll('.no-print'); // Hide buttons
+
+            buttons.forEach(btn => btn.style.display = 'none'); // Sembunyikan tombol
+
+            html2canvas(kwitansiArea, {
+                scale: 2
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'kwitansi_pemakaian_'+ noPemakaian +'.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                buttons.forEach(btn => btn.style.display = ''); // Tampilkan tombol lagi
             });
         }
 
-        function updateStatus() {
-            $.post("{{ route('pemakaian.update-status')}}",{
-                _token: '{{ csrf_token() }}',
-                noPemakaian: selectedNoPemakaian
-            }, function(response) {
-                alert(response.message);
-                $('#detailStatus').text('Sudah Lunas').removeClass('bg-danger').addClass('bg-success');
-            });
+        function closeModal() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
+            modal.hide();
         }
 
-        async function generatePDF() {
-            const {
-                jsPDF
-            } = window.jspdf;
-            const modalBody = document.getElementById("kwitansiContent");
+        function filterStatus(status) {
+            // Ubah tampilan tombol sebelum submit
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('underline', 'noneunderline'));
 
-            const canvas = await html2canvas(modalBody, {
-                scale: 2,
-                useCORS: true
-            });
+            if (status === 'Sudah Lunas') {
+                buttons[0].classList.add('underline');
+                buttons[1].classList.add('noneunderline');
+            } else if (status === 'Belum Lunas') {
+                buttons[0].classList.add('noneunderline');
+                buttons[1].classList.add('underline');
+            }
 
-            const imgData = canvas.toDataURL("image/png");
-            const pdf = new jsPDF("p", "mm", "a4");
-
-            const imgProps = pdf.getImageProperties(imgData);
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-            pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
-            pdf.save(`kwitansi-${selectedNoPemakaian}.pdf`);
+            // Update value status dan submit form
+            const form = document.querySelector('form');
+            form.querySelector('input[name="status"]').value = status;
+            form.submit();
         }
     </script>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 @endsection
