@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('content')
+@extends('layouts.LayoutPelanggan')
+@section('contentpelanggan')
 
 <style>
     /* CSS yang kamu punya */
@@ -100,8 +100,7 @@
     <!-- Search Card -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <form action="{{ route('loket.pemakaian') }}" method="GET">
-                {{-- ⬇️ Di sini kita set default Sudah Lunas --}}
+            <form action="{{ route('pelanggan.pemakaian') }}" method="GET">
                 <input type="hidden" name="status" value="{{ request('status') ?? 'Sudah Lunas' }}">
                 <div class="input-group">
                     <input type="text" name="no_kontrol" class="form-control" placeholder="Cari No Kontrol..."
@@ -187,14 +186,10 @@
 
             <!-- Footer tombol download/tutup -->
             <div class="modal-footer">
-                <button id="btnUbahStatus" onclick="ubahStatus()" class="btn btn-warning no-print" style="display: none;">
-                    Ubah ke Sudah Lunas
-                </button>
-
                 <button onclick="downloadKwitansi()" class="btn btn-success no-print">Download Gambar</button>
                 <button onclick="closeModal()" class="btn btn-danger no-print">Tutup</button>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>
@@ -202,26 +197,26 @@
 <!-- Script -->
 <script>
     let currentNoPemakaian = '';
-    let myModal = null;
+    let myModal = null; // ⬅️ Ini ditambahkan
 
     function showDetail(noPemakaian) {
         currentNoPemakaian = noPemakaian;
-        fetch(`/loket/detailpemakaian/${noPemakaian}`)
+        fetch(`/detailpemakaian/${noPemakaian}`)
             .then(response => response.json())
             .then(data => {
                 const leftDetail = `
-                    <p><strong>No Pemakaian:</strong> ${data.noPemakaian}</p>
-                    <p><strong>No Kontrol:</strong> ${data.noKontrol}</p>
-                    <p><strong>Meter Awal:</strong> ${data.meter_awal} KWH</p>
-                    <p><strong>Meter Akhir:</strong> ${data.meter_akhir} KWH</p>
-                `;
+                <p><strong>No Pemakaian:</strong> ${data.noPemakaian}</p>
+                <p><strong>No Kontrol:</strong> ${data.noKontrol}</p>
+                <p><strong>Meter Awal:</strong> ${data.meter_awal} KWH</p>
+                <p><strong>Meter Akhir:</strong> ${data.meter_akhir} KWH</p>
+            `;
 
                 const rightDetail = `
-                    <p><strong>Jumlah Pakai:</strong> ${data.jumlah_pakai} KWH</p>
-                    <p><strong>Biaya Pemakai:</strong> Rp ${formatRupiah(data.biaya_pemakai)}</p>
-                    <p><strong>Biaya Beban:</strong> Rp ${formatRupiah(data.biaya_beban_pemakai)}</p>
-                    <p><strong>Status:</strong> ${data.status}</p>
-                `;
+                <p><strong>Jumlah Pakai:</strong> ${data.jumlah_pakai} KWH</p>
+                <p><strong>Biaya Pemakai:</strong> Rp ${formatRupiah(data.biaya_pemakai)}</p>
+                <p><strong>Biaya Beban:</strong> Rp ${formatRupiah(data.biaya_beban_pemakai)}</p>
+                <p><strong>Status:</strong> ${data.status}</p>
+            `;
 
                 document.getElementById('leftDetail').innerHTML = leftDetail;
                 document.getElementById('rightDetail').innerHTML = rightDetail;
@@ -233,32 +228,30 @@
                     height: 80
                 });
 
-                const btnDownload = document.querySelector('button[onclick="downloadKwitansi()"]');
-                const btnUbahStatus = document.getElementById('btnUbahStatus');
-
+                // Mengecek status dan menghilangkan tombol Download jika statusnya "Belum Lunas"
                 if (data.status === 'Belum Lunas') {
-                    btnDownload.style.display = 'none';
-                    btnUbahStatus.style.display = 'inline-block';
+                    document.querySelector('.modal-footer .no-print').style.display = 'none';
                 } else {
-                    btnDownload.style.display = '';
-                    btnUbahStatus.style.display = 'none';
+                    document.querySelector('.modal-footer .no-print').style.display = '';
                 }
 
                 document.getElementById('mainContent').classList.add('blurred');
 
+                // Simpan instance modal
                 myModal = new bootstrap.Modal(document.getElementById('detailModal'), {
-                    backdrop: 'static',
-                    keyboard: false
+                    backdrop: 'static', // Tidak tertutup kalau klik background
+                    keyboard: false // Tidak tertutup kalau tekan Esc
                 });
 
                 myModal.show();
 
+                // Tambahkan event listener untuk menghapus blur saat modal ditutup
                 const modalElement = document.getElementById('detailModal');
                 modalElement.addEventListener('hidden.bs.modal', function() {
                     document.getElementById('mainContent').classList.remove('blurred');
                 }, {
                     once: true
-                });
+                }); // once: true supaya tidak dobel-dobel eventnya
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -266,28 +259,6 @@
             });
     }
 
-    function ubahStatus() {
-        fetch(`/loket/updatestatus/${currentNoPemakaian}`, {
-                method: 'PUT',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    location.reload();
-                } else {
-                    alert('Gagal mengubah status.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat mengubah status.');
-            });
-    }
 
     function closeModal() {
         if (myModal) {
@@ -302,26 +273,27 @@
 
     function downloadKwitansi() {
         const kwitansiArea = document.getElementById('kwitansiArea');
+        const buttons = kwitansiArea.querySelectorAll('.no-print'); // Hide buttons
 
-        // Secara eksplisit ambil dan sembunyikan semua tombol .no-print
-        const buttons = kwitansiArea.querySelectorAll('.no-print');
-        buttons.forEach(btn => btn.style.visibility = 'hidden'); // Ganti ke visibility agar layout tidak berubah
+        buttons.forEach(btn => btn.style.display = 'none'); // Sembunyikan tombol
 
         html2canvas(kwitansiArea, {
             scale: 2
         }).then(canvas => {
             const link = document.createElement('a');
-            const filename = 'kwitansi_pemakaian_' + currentNoPemakaian + '.png';
+            const filename = 'kwitansi_pemakaian_' + currentNoPemakaian + '.png'; // ⬅️ Pakai currentNoPemakaian
             link.download = filename;
             link.href = canvas.toDataURL('image/png');
             link.click();
 
-            // Kembalikan tombol-tombol
-            buttons.forEach(btn => btn.style.visibility = 'visible');
+            buttons.forEach(btn => btn.style.display = ''); // Tampilkan tombol lagi
         });
     }
 
+
+
     function filterStatus(status) {
+        // Ubah tampilan tombol sebelum submit
         const buttons = document.querySelectorAll('.filter-btn');
         buttons.forEach(btn => btn.classList.remove('underline', 'noneunderline'));
 
@@ -333,13 +305,13 @@
             buttons[1].classList.add('underline');
         }
 
+        // Update value status dan submit form
         const form = document.querySelector('form');
         form.querySelector('input[name="status"]').value = status;
         form.submit();
     }
 </script>
 
-<!-- Tambahkan library yang dibutuhkan -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 

@@ -132,23 +132,23 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
     <body>
-        <div class="container hero-section">
+        <div class="container hero-section" style="margin-top: -50px;">
         <!-- align-items-center -->
             <div class="row  justify-content-center">
                 <!-- Kiri: Logo + Teks -->
-                <div class="col-md-6 mt-5">
+                <div class="col-md-6 " style="margin-top: 150px;">
                     <div class="headline">PLN – Listrik Untuk Kehidupan Yang Lebih Baik.</div>
                     <div class="description">
                         Menerangi Dunia, Mendorong Kemajuan. <br>
                         Dari Indonesia, kami hadirkan energi yang menghubungkan setiap orang, membuka jalan untuk kemudahan,
                         keberlanjutan, dan inovasi bagi masa depan yang lebih baik.
                     </div>
-                    <a href="{{'login'}}" class="btn btn-primary">Cek Data Pemakaian</a>
+                    <a href="{{'pemakaian'}}" class="btn btn-primary">Cek Data Pemakaian</a>
                 </div>
 
                 <!-- Kanan: Gambar pekerja -->
                 <div class="col-md-6 text-center">
-                    <img src="img/pekerja_pln.png" alt="Petugas PLN" class="worker-img">
+                    <img src="img/orang[1].png" alt="Petugas PLN" class="worker-img">
                 </div>
             </div>
         </div>

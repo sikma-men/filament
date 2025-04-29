@@ -22,7 +22,7 @@ class LoketController extends Controller
         ]);
 
         if (Auth::guard('loket')->attempt($request->only('email', 'password'))) {
-            return redirect()->route('carinokontrol')
+            return redirect()->route('loket.pemakaian')
                 ->with('success', 'Login berhasil!');
         }
 
@@ -39,7 +39,7 @@ class LoketController extends Controller
         Auth::guard('loket')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login');
+        return redirect()->route('loket.login');
     }
 
     public function pemakaian(Request $request)
@@ -73,34 +73,26 @@ class LoketController extends Controller
         return response()->json($data);
     }
 
+
+
+
     public function laporan()
     {
         $pemakaian = Pemakaian::all();
         return view('loket.laporan', compact('pemakaian'));
     }
 
-    public function updateStatus(Request $request)
+    public function updateStatus($noPemakaian)
     {
-        $request->validate([
-            'noPemakaian' => 'required|exists:pemakaian,noPemakaian',
-        ]);
-
-        $pemakaian = Pemakaian::where('noPemakaian', $request->noPemakaian)->first();
-
-        if ($pemakaian) {
+        try {
+            $pemakaian = Pemakaian::where('noPemakaian', $noPemakaian)->firstOrFail();
             $pemakaian->status = 'Sudah Lunas';
             $pemakaian->save();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Status berhasil diperbarui!',
-            ]);
+            return response()->json(['success' => true, 'message' => 'Status berhasil diubah.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal mengubah status.'], 500);
         }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Data tidak ditemukan!',
-        ], 404);
     }
 
     public function laporankeuangan()

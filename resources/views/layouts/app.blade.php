@@ -132,7 +132,7 @@
             function animateMarquee(time) {
                 const delta = (time - lastTime) / 1000;
                 lastTime = time;
-                const speed = 100;
+                const speed = 35;
                 lastPos -= delta * speed;
 
                 const resetAt = -marquee.offsetWidth;

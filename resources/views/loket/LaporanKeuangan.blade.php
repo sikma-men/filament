@@ -32,7 +32,7 @@
     }
 
     .sidebar .nav-link:hover {
-        background-color: #;333
+        background-color: #333;
         color: #fff !important;
         transform: scale(1.03);
     }

@@ -185,7 +185,7 @@ class PemakaianResource extends Resource
                 Forms\Components\Select::make('status')
                     ->label('Status')
                     ->options([
-                        'Lunas' => 'Lunas',
+                        'Sudah Lunas' => 'Sudah Lunas',
                         'Belum Lunas' => 'Belum Lunas',
                     ])
                     ->required(),
