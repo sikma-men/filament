@@ -95,7 +95,7 @@ class LoketController extends Controller
         }
     }
 
-    public function laporankeuangan()
+    public function keseluruhan()
     {
         $totalBiayaPemakaianR1 = DB::table('pemakaian')
             ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
@@ -170,4 +170,36 @@ class LoketController extends Controller
             'totalBiayaPemakaianI4'
         ));
     }
+    // public function keseluruhan()
+    // {
+    //     // Misalnya return view khusus untuk laporan keseluruhan
+    //     return view('loket.laporankeuangan');
+    // }
+    public function jenisPelanggan()
+    {
+        $jenisPelangganList = ['R-1', 'R-2', 'R-3', 'B-1', 'B-2', 'B-3', 'I-2', 'I-3', 'I-4'];
+
+        $data = [];
+
+        foreach ($jenisPelangganList as $jenis) {
+            // Format variabel agar sesuai dengan penamaan variabel Blade (misal: R-1 → R1)
+            $key = str_replace('-', '', $jenis);
+
+            $data["totalBiayaPemakaian$key"] = DB::table('pemakaian')
+                ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+                ->where('pelanggan.jenis_pelanggan', $jenis)
+                ->where('pemakaian.status', 'sudah lunas')
+                ->sum('pemakaian.biaya_pemakai');
+
+            // Optional: Jika ingin biaya beban juga
+            $data["totalBiayaBeban$key"] = DB::table('pemakaian')
+                ->join('pelanggan', 'pemakaian.noKontrol', '=', 'pelanggan.noKontrol')
+                ->where('pelanggan.jenis_pelanggan', $jenis)
+                ->where('pemakaian.status', 'sudah lunas')
+                ->sum('pemakaian.biaya_beban_pemakai');
+        }
+
+        return view('loket.berdasarkanjenispelanggan', $data);
+    }
+
 }

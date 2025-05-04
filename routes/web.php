@@ -34,10 +34,10 @@ Route::prefix('loket')->middleware('auth:loket')->group(function () {
     Route::get('/detailpemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('loket.detailpemakaian');
     Route::get('/pemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('loket.pemakaian.detail');
 
-    Route::get('/laporan', [LoketController::class, 'laporan'])->name('loket.laporan');
-    Route::get('/laporankeuangan', [LoketController::class, 'laporankeuangan'])->name('loket.laporankeuangan');
-    Route::get('/laporankeseluruhan', [LoketController::class, 'keseluruhan'])->name('loket.laporankeseluruhan');
-    Route::get('/laporanjenis', [LoketController::class, 'jenisPelanggan'])->name('loket.laporanjenis');
+    // Route::get('/laporan', [LoketController::class, 'laporan'])->name('loket.laporan');
+    Route::get('/laporankeuangan/keseluruhan', [LoketController::class, 'laporankeuangan'])->name('loket.laporankeuangan');
+    Route::get('/laporankeuangan/keseluruhan', [LoketController::class, 'keseluruhan'])->name('loket.laporankeseluruhan');
+    Route::get('/laporankeuangan/jenispelanggan', [LoketController::class, 'jenisPelanggan'])->name('loket.laporanjenis');
 });
 
 

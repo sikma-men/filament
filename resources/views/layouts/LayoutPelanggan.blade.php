@@ -162,7 +162,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item costum-li">
-          <a class="{{ request()->is('loket/pemakaian') ? 'after' : 'before' }} ahover" href="{{ route('loket.pemakaian') }}">
+          <a class="{{ request()->is('pemakaian') ? 'after' : 'before' }} ahover" href="{{ route('pelanggan.pemakaian') }}">
             Cari Data Pemakaian
           </a>
         </li>
