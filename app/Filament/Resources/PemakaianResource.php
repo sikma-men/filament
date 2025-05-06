@@ -49,7 +49,6 @@ class PemakaianResource extends Resource
                 // Sembunyikan No Pemakaian
                 Forms\Components\Hidden::make('noPemakaian'),
 
-                // Input Bulan
                 Forms\Components\Select::make('bulan')
                     ->label('Bulan')
                     ->options([

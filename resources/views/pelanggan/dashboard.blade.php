@@ -136,7 +136,7 @@
         <!-- align-items-center -->
             <div class="row  justify-content-center">
                 <!-- Kiri: Logo + Teks -->
-                <div class="col-md-6 " style="margin-top: 150px;">
+                <div class="col-md-6 " style="margin-top: 120px;">
                     <div class="headline">PLN – Listrik Untuk Kehidupan Yang Lebih Baik.</div>
                     <div class="description">
                         Menerangi Dunia, Mendorong Kemajuan. <br>
@@ -148,7 +148,7 @@
 
                 <!-- Kanan: Gambar pekerja -->
                 <div class="col-md-6 text-center">
-                    <img src="img/orang[1].png" alt="Petugas PLN" class="worker-img">
+                    <img src="img/orang[1].png" alt="Petugas PLN" class="worker-img" style="width:450px; height:auto;">
                 </div>
             </div>
         </div>

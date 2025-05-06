@@ -322,6 +322,7 @@
     }
 
     function filterStatus(status) {
+        // Ubah tampilan tombol sebelum submit
         const buttons = document.querySelectorAll('.filter-btn');
         buttons.forEach(btn => btn.classList.remove('underline', 'noneunderline'));
 
@@ -333,6 +334,7 @@
             buttons[1].classList.add('underline');
         }
 
+        // Update value status dan submit form
         const form = document.querySelector('form');
         form.querySelector('input[name="status"]').value = status;
         form.submit();
