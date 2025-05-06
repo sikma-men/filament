@@ -11,6 +11,12 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
+    .filter-x {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 10px;
+    }
     .card-hover:hover {
         transform: scale(1.01);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -115,7 +121,7 @@
     </div>
 
     <!-- Filter Buttons -->
-    <div class="filter-buttons mt-3">
+    <div class="filter-x mt-3">
         <button type="button" onclick="filterStatus('Sudah Lunas')"
             class="filter-btn {{ (request('status') ?? 'Sudah Lunas') == 'Sudah Lunas' ? 'underline' : 'noneunderline' }}">
             Sudah Lunas
@@ -156,7 +162,6 @@
     @endif
 
 </div>
-
 <!-- Modal Detail -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -210,18 +215,18 @@
             .then(response => response.json())
             .then(data => {
                 const leftDetail = `
-                    <p><strong>No Pemakaian:</strong> ${data.noPemakaian}</p>
-                    <p><strong>No Kontrol:</strong> ${data.noKontrol}</p>
-                    <p><strong>Meter Awal:</strong> ${data.meter_awal} KWH</p>
-                    <p><strong>Meter Akhir:</strong> ${data.meter_akhir} KWH</p>
-                `;
+                <p><strong>No Pemakaian:</strong> ${data.noPemakaian}</p>
+                <p><strong>No Kontrol:</strong> ${data.noKontrol}</p>
+                <p><strong>Meter Awal:</strong> ${data.meter_awal} KWH</p>
+                <p><strong>Meter Akhir:</strong> ${data.meter_akhir} KWH</p>
+            `;
 
                 const rightDetail = `
-                    <p><strong>Jumlah Pakai:</strong> ${data.jumlah_pakai} KWH</p>
-                    <p><strong>Biaya Pemakai:</strong> Rp ${formatRupiah(data.biaya_pemakai)}</p>
-                    <p><strong>Biaya Beban:</strong> Rp ${formatRupiah(data.biaya_beban_pemakai)}</p>
-                    <p><strong>Status:</strong> ${data.status}</p>
-                `;
+                <p><strong>Jumlah Pakai:</strong> ${data.jumlah_pakai} KWH</p>
+                <p><strong>Biaya Pemakai:</strong> Rp ${formatRupiah(data.biaya_pemakai)}</p>
+                <p><strong>Biaya Beban:</strong> Rp ${formatRupiah(data.biaya_beban_pemakai)}</p>
+                <p><strong>Status:</strong> ${data.status}</p>
+            `;
 
                 document.getElementById('leftDetail').innerHTML = leftDetail;
                 document.getElementById('rightDetail').innerHTML = rightDetail;
@@ -233,32 +238,30 @@
                     height: 80
                 });
 
-                const btnDownload = document.querySelector('button[onclick="downloadKwitansi()"]');
-                const btnUbahStatus = document.getElementById('btnUbahStatus');
-
+                // Mengecek status dan menghilangkan tombol Download jika statusnya "Belum Lunas"
                 if (data.status === 'Belum Lunas') {
-                    btnDownload.style.display = 'none';
-                    btnUbahStatus.style.display = 'inline-block';
+                    document.querySelector('.modal-footer .no-print').style.display = 'none';
                 } else {
-                    btnDownload.style.display = '';
-                    btnUbahStatus.style.display = 'none';
+                    document.querySelector('.modal-footer .no-print').style.display = '';
                 }
 
                 document.getElementById('mainContent').classList.add('blurred');
 
+                // Simpan instance modal
                 myModal = new bootstrap.Modal(document.getElementById('detailModal'), {
-                    backdrop: 'static',
-                    keyboard: false
+                    backdrop: 'static', // Tidak tertutup kalau klik background
+                    keyboard: false // Tidak tertutup kalau tekan Esc
                 });
 
                 myModal.show();
 
+                // Tambahkan event listener untuk menghapus blur saat modal ditutup
                 const modalElement = document.getElementById('detailModal');
                 modalElement.addEventListener('hidden.bs.modal', function() {
                     document.getElementById('mainContent').classList.remove('blurred');
                 }, {
                     once: true
-                });
+                }); // once: true supaya tidak dobel-dobel eventnya
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -322,7 +325,6 @@
     }
 
     function filterStatus(status) {
-        // Ubah tampilan tombol sebelum submit
         const buttons = document.querySelectorAll('.filter-btn');
         buttons.forEach(btn => btn.classList.remove('underline', 'noneunderline'));
 

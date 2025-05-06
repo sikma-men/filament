@@ -31,7 +31,7 @@
         color: white;
     }
 
-    .filter-buttons {
+    .filter-x {
         display: flex;
         justify-content: center;
         gap: 20px;
@@ -113,8 +113,8 @@
         </div>
     </div>
 
-    <!-- Filter Buttons -->
-    <div class="filter-buttons mt-3">
+    <!-- Filter x -->
+    <div class="filter-x mt-3">
         <button type="button" onclick="filterStatus('Sudah Lunas')"
             class="filter-btn {{ (request('status') ?? 'Sudah Lunas') == 'Sudah Lunas' ? 'underline' : 'noneunderline' }}">
             Sudah Lunas
@@ -197,7 +197,7 @@
 <!-- Script -->
 <script>
     let currentNoPemakaian = '';
-    let myModal = null; // ⬅️ Ini ditambahkan
+    let myModal = null;
 
     function showDetail(noPemakaian) {
         currentNoPemakaian = noPemakaian;
@@ -273,9 +273,9 @@
 
     function downloadKwitansi() {
         const kwitansiArea = document.getElementById('kwitansiArea');
-        const buttons = kwitansiArea.querySelectorAll('.no-print'); // Hide buttons
+        const x = kwitansiArea.querySelectorAll('.no-print'); // Hide x
 
-        buttons.forEach(btn => btn.style.display = 'none'); // Sembunyikan tombol
+        x.forEach(btn => btn.style.display = 'none'); // Sembunyikan tombol
 
         html2canvas(kwitansiArea, {
             scale: 2
@@ -294,15 +294,15 @@
 
     function filterStatus(status) {
         // Ubah tampilan tombol sebelum submit
-        const buttons = document.querySelectorAll('.filter-btn');
-        buttons.forEach(btn => btn.classList.remove('underline', 'noneunderline'));
+        const x = document.querySelectorAll('.filter-btn');
+        x.forEach(btn => btn.classList.remove('underline', 'noneunderline'));
 
         if (status === 'Sudah Lunas') {
-            buttons[0].classList.add('underline');
-            buttons[1].classList.add('noneunderline');
+            x[0].classList.add('underline');
+            x[1].classList.add('noneunderline');
         } else if (status === 'Belum Lunas') {
-            buttons[0].classList.add('noneunderline');
-            buttons[1].classList.add('underline');
+            x[0].classList.add('noneunderline');
+            x[1].classList.add('underline');
         }
 
         // Update value status dan submit form

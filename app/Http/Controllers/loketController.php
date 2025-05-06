@@ -59,7 +59,7 @@ class LoketController extends Controller
             $pemakaian = $query->get();
         }
 
-        return view('loket.carinokontrol', compact('pemakaian', 'noKontrol', 'status'));
+        return view('loket.cariNoKontrol', compact('pemakaian', 'noKontrol'));
     }
 
     public function show($noPemakaian)
