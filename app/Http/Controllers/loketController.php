@@ -22,16 +22,11 @@ class LoketController extends Controller
         ]);
 
         if (Auth::guard('loket')->attempt($request->only('email', 'password'))) {
-            return redirect()->route('loket.pemakaian')
+            return redirect()->route('pemakaian')
                 ->with('success', 'Login berhasil!');
         }
 
         return redirect()->route('loginloket')->with('error', 'Email atau password salah!');
-    }
-
-    public function dashboard()
-    {
-        return view('loket.dashboard');
     }
 
     public function logout(Request $request)
@@ -42,7 +37,7 @@ class LoketController extends Controller
         return redirect()->route('loket.login');
     }
 
-    public function pemakaian(Request $request)
+      public function pemakaian(Request $request)
     {
         $noKontrol = $request->input('no_kontrol');
         $status = $request->input('status');
@@ -59,7 +54,7 @@ class LoketController extends Controller
             $pemakaian = $query->get();
         }
 
-        return view('loket.cariNoKontrol', compact('pemakaian', 'noKontrol'));
+        return view('loket.pemakaian', compact('pemakaian', 'noKontrol'));
     }
 
     public function show($noPemakaian)

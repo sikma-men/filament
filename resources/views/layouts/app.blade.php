@@ -180,7 +180,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item costum-li">
                     <a class="{{ request()->is('loket/pemakaian') ? 'after' : 'before' }} ahover"
-                        href="{{ route('loket.pemakaian') }}">
+                        href="{{ route('pemakaian') }}">
                         Cari Data Pemakaian
                     </a>
                 </li>
@@ -193,13 +193,10 @@
 
                 <!-- User Dropdown -->
                 <li class="nav-item costum-li">
-                    <form id="logout-form" action="{{ route('loket.logout') }}" method="POST" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-link before ahover"
+                        <a type="submit" href="{{ route('loket.logout') }}" class="btn btn-link before ahover"
                             style="color: white; font-size: 18px;">
                             <i class="fas fa-sign-out-alt logout-icon"></i> Logout
-                        </button>
-                    </form>
+                </a>
                 </li>
 
             </ul>
@@ -210,9 +207,9 @@
     <div class="container mt-4">@yield('content')</div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

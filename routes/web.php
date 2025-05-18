@@ -11,12 +11,11 @@ Route::get('/loket/login', [LoketController::class, 'showLoginForm'])->name('lok
 Route::post('/loket/login', [LoketController::class, 'loginloket']);
 
 // Route untuk logout
-Route::post('/loket/logout', [LoketController::class, 'logout'])->name('loket.logout');
+Route::get('/loket/logout', [LoketController::class, 'logout'])->name('loket.logout');
 
 // Group semua yang butuh auth loket
 Route::prefix('loket')->middleware('auth:loket')->group(function () {
-    Route::get('/dashboard', [LoketController::class, 'dashboard'])->name('loket.dashboard');
-    Route::get('/pemakaians', [LoketController::class, 'pemakaian'])->name('loket.pemakaian');
+    Route::get('/pemakaian', [LoketController::class, 'pemakaian'])->name('pemakaian');
     Route::put('/updatestatus/{noPemakaian}', [LoketController::class, 'updateStatus'])->name('loket.updateStatus');
     Route::get('/detailpemakaian/{noPemakaian}', [LoketController::class, 'show'])->name('loket.detailpemakaian');
     Route::get('/laporankeuangan/keseluruhan', [LoketController::class, 'keseluruhan'])->name('loket.laporankeseluruhan');
