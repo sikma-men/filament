@@ -28,5 +28,7 @@ Route::get('/', function () {
 })->name('pelanggan.dashboard');
 
 // Rute pemakaian untuk pelanggan
+Route::get('/pemakaian/download/{noPemakaian}', [PelangganController::class, 'downloadPDF'])->name('pemakaian.download');
 Route::get('/pemakaian', [PelangganController::class, 'pemakaian'])->name('pelanggan.pemakaian');
+Route::get('/pemakaian/detail/{noPemakaian}', [PelangganController::class, 'showDetail'])->name('pemakaian.detail');
 Route::get('/detailpemakaian/{noPemakaian}', [PelangganController::class, 'show'])->name('pelanggan.detailpemakaian');
